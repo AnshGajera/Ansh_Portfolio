@@ -1,0 +1,109 @@
+# Portfolio Backend API List
+# Generated: 2026-01-27
+# Total: 23 API Endpoints
+
+================================================================================
+                              BACKEND API ENDPOINTS
+================================================================================
+
+## 1. AUTHENTICATION APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                | Description                              |
+|---------|-------------------------|------------------------------------------|
+| POST    | /api/auth/login         | Admin login                              |
+| POST    | /api/auth/logout        | Admin logout                             |
+| GET     | /api/auth/me            | Get current authenticated user           |
+| POST    | /api/auth/register      | Admin registration                       |
+| PUT     | /api/auth/update        | Update admin credentials                 |
+
+## 2. PROJECTS APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                      | Description                      |
+|---------|-------------------------------|----------------------------------|
+| GET     | /api/projects                 | List all projects                |
+| POST    | /api/projects                 | Create a new project (auth req)  |
+| GET     | /api/projects/[id]            | Get single project by ID         |
+| PUT     | /api/projects/[id]            | Update project (auth required)   |
+| DELETE  | /api/projects/[id]            | Delete project (auth required)   |
+| PUT     | /api/projects/[id]/priority   | Update project priority          |
+| PUT     | /api/projects/priority        | Bulk update project priorities   |
+
+## 3. BLOGS APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint              | Description                              |
+|---------|-----------------------|------------------------------------------|
+| GET     | /api/blogs            | List all blogs                           |
+| POST    | /api/blogs            | Create a new blog (auth required)        |
+| GET     | /api/blogs/[id]       | Get single blog by ID                    |
+| PUT     | /api/blogs/[id]       | Update blog (auth required)              |
+| DELETE  | /api/blogs/[id]       | Delete blog (auth required)              |
+
+## 4. CERTIFICATIONS APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                    | Description                        |
+|---------|-----------------------------|-------------------------------------|
+| GET     | /api/certifications         | List all certifications             |
+| POST    | /api/certifications         | Create certification (auth req)     |
+| GET     | /api/certifications/[id]    | Get single certification by ID      |
+| PUT     | /api/certifications/[id]    | Update certification (auth req)     |
+| DELETE  | /api/certifications/[id]    | Delete certification (auth req)     |
+
+## 5. GUESTBOOK APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                    | Description                         |
+|---------|-----------------------------|------------------------------------|
+| GET     | /api/guestbook              | List all active guestbook entries  |
+| POST    | /api/guestbook              | Create new guestbook entry         |
+| GET     | /api/guestbook/[id]         | Get single entry by ID             |
+| PUT     | /api/guestbook/[id]         | Update/moderate entry (admin)      |
+| DELETE  | /api/guestbook/[id]         | Delete entry (admin)               |
+| GET     | /api/guestbook/pending      | Get pending entries for moderation |
+| GET     | /api/guestbook/user/[id]    | Get entries by user ID             |
+
+## 6. ADMIN APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                    | Description                        |
+|---------|-----------------------------|------------------------------------|
+| *       | /api/admin/guestbook        | Admin guestbook management         |
+
+## 7. ANALYTICS APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint                    | Description                        |
+|---------|-----------------------------|------------------------------------|
+| GET     | /api/analytics              | Get visitor statistics (auth req)  |
+| GET     | /api/analytics/logs         | Get visitor logs (auth required)   |
+| GET     | /api/analytics/export       | Export logs as CSV (auth required) |
+| POST    | /api/analytics/track        | Track visitor activity             |
+
+## 8. UPLOAD APIs
+--------------------------------------------------------------------------------
+| Method  | Endpoint              | Description                              |
+|---------|-----------------------|------------------------------------------|
+| POST    | /api/upload           | Upload files to Cloudinary               |
+
+================================================================================
+                              API SUMMARY
+================================================================================
+
+Total Endpoints: 23
+- Authentication: 5
+- Projects: 7  
+- Blogs: 5
+- Certifications: 5
+- Guestbook: 7
+- Admin: 1
+- Analytics: 4
+- Upload: 1
+
+Required Environment Variables (Backend):
+- MONGODB_URI          : MongoDB connection string
+- JWT_SECRET           : Secret for JWT token signing
+- CLOUDINARY_CLOUD_NAME: Cloudinary cloud name
+- CLOUDINARY_API_KEY   : Cloudinary API key
+- CLOUDINARY_API_SECRET: Cloudinary API secret
+
+Required Environment Variables (Frontend):
+- NEXT_PUBLIC_BACKEND_URL: Backend API base URL
+- RESEND_API_KEY         : Resend email API key
+- GMAIL_APP_PASSWORD     : Gmail app password (optional)
+- GMAIL_USER             : Gmail user (optional)

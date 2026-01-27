@@ -1,0 +1,12 @@
+# Backend runs on port 4000
+# MongoDB connection string (@ in password is URL encoded as %40)
+# Added retryWrites and w=majority for better compatibility
+MONGODB_URI=mongodb+srv://23aiml019:%40nsh2785@anshportfolio.knvdhhp.mongodb.net/portfolio?retryWrites=true&w=majority
+
+# JWT Secret for authentication
+JWT_SECRET=ansh_portfolio_jwt_secret_2026
+
+# Cloudinary for image uploads (required for admin panel)
+CLOUDINARY_CLOUD_NAME=dedm8zbh4
+CLOUDINARY_API_KEY=745854171693991
+CLOUDINARY_API_SECRET=RIIeo88lbB1QA0dxvSw9rNsy10k
