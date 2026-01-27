@@ -1,109 +1,197 @@
-# Portfolio Backend API List
-# Generated: 2026-01-27
-# Total: 23 API Endpoints
+# Portfolio Backend API Documentation
+## Ready for Vercel Deployment ✅
 
-================================================================================
-                              BACKEND API ENDPOINTS
-================================================================================
+**Base URL (Local)**: http://localhost:4000
+**Base URL (Production)**: https://your-backend.vercel.app
 
-## 1. AUTHENTICATION APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                | Description                              |
-|---------|-------------------------|------------------------------------------|
-| POST    | /api/auth/login         | Admin login                              |
-| POST    | /api/auth/logout        | Admin logout                             |
-| GET     | /api/auth/me            | Get current authenticated user           |
-| POST    | /api/auth/register      | Admin registration                       |
-| PUT     | /api/auth/update        | Update admin credentials                 |
+---
 
-## 2. PROJECTS APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                      | Description                      |
-|---------|-------------------------------|----------------------------------|
-| GET     | /api/projects                 | List all projects                |
-| POST    | /api/projects                 | Create a new project (auth req)  |
-| GET     | /api/projects/[id]            | Get single project by ID         |
-| PUT     | /api/projects/[id]            | Update project (auth required)   |
-| DELETE  | /api/projects/[id]            | Delete project (auth required)   |
-| PUT     | /api/projects/[id]/priority   | Update project priority          |
-| PUT     | /api/projects/priority        | Bulk update project priorities   |
+## 🔐 Authentication APIs
 
-## 3. BLOGS APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint              | Description                              |
-|---------|-----------------------|------------------------------------------|
-| GET     | /api/blogs            | List all blogs                           |
-| POST    | /api/blogs            | Create a new blog (auth required)        |
-| GET     | /api/blogs/[id]       | Get single blog by ID                    |
-| PUT     | /api/blogs/[id]       | Update blog (auth required)              |
-| DELETE  | /api/blogs/[id]       | Delete blog (auth required)              |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/auth/login` | No | Admin login with email/password |
+| POST | `/api/auth/logout` | Yes | Admin logout (clears cookie) |
+| GET | `/api/auth/me` | Yes | Get current admin info |
+| POST | `/api/auth/register` | Yes | Register new admin (protected) |
+| PUT | `/api/auth/update` | Yes | Update admin credentials |
 
-## 4. CERTIFICATIONS APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                    | Description                        |
-|---------|-----------------------------|-------------------------------------|
-| GET     | /api/certifications         | List all certifications             |
-| POST    | /api/certifications         | Create certification (auth req)     |
-| GET     | /api/certifications/[id]    | Get single certification by ID      |
-| PUT     | /api/certifications/[id]    | Update certification (auth req)     |
-| DELETE  | /api/certifications/[id]    | Delete certification (auth req)     |
+---
 
-## 5. GUESTBOOK APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                    | Description                         |
-|---------|-----------------------------|------------------------------------|
-| GET     | /api/guestbook              | List all active guestbook entries  |
-| POST    | /api/guestbook              | Create new guestbook entry         |
-| GET     | /api/guestbook/[id]         | Get single entry by ID             |
-| PUT     | /api/guestbook/[id]         | Update/moderate entry (admin)      |
-| DELETE  | /api/guestbook/[id]         | Delete entry (admin)               |
-| GET     | /api/guestbook/pending      | Get pending entries for moderation |
-| GET     | /api/guestbook/user/[id]    | Get entries by user ID             |
+## 📁 Projects APIs
 
-## 6. ADMIN APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                    | Description                        |
-|---------|-----------------------------|------------------------------------|
-| *       | /api/admin/guestbook        | Admin guestbook management         |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/projects` | No | List all active projects |
+| POST | `/api/projects` | Yes | Create new project |
+| GET | `/api/projects/[id]` | No | Get single project by ID/slug |
+| PUT | `/api/projects/[id]` | Yes | Update project |
+| DELETE | `/api/projects/[id]` | Yes | Delete project |
+| PUT | `/api/projects/priority` | Yes | Bulk update project priorities |
 
-## 7. ANALYTICS APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint                    | Description                        |
-|---------|-----------------------------|------------------------------------|
-| GET     | /api/analytics              | Get visitor statistics (auth req)  |
-| GET     | /api/analytics/logs         | Get visitor logs (auth required)   |
-| GET     | /api/analytics/export       | Export logs as CSV (auth required) |
-| POST    | /api/analytics/track        | Track visitor activity             |
+---
 
-## 8. UPLOAD APIs
---------------------------------------------------------------------------------
-| Method  | Endpoint              | Description                              |
-|---------|-----------------------|------------------------------------------|
-| POST    | /api/upload           | Upload files to Cloudinary               |
+## 📝 Blogs APIs
 
-================================================================================
-                              API SUMMARY
-================================================================================
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/blogs` | No | List all active blogs |
+| POST | `/api/blogs` | Yes | Create new blog |
+| GET | `/api/blogs/[id]` | No | Get single blog by ID/slug |
+| PUT | `/api/blogs/[id]` | Yes | Update blog |
+| DELETE | `/api/blogs/[id]` | Yes | Delete blog |
 
-Total Endpoints: 23
-- Authentication: 5
-- Projects: 7  
-- Blogs: 5
-- Certifications: 5
-- Guestbook: 7
-- Admin: 1
-- Analytics: 4
-- Upload: 1
+---
 
-Required Environment Variables (Backend):
-- MONGODB_URI          : MongoDB connection string
-- JWT_SECRET           : Secret for JWT token signing
-- CLOUDINARY_CLOUD_NAME: Cloudinary cloud name
-- CLOUDINARY_API_KEY   : Cloudinary API key
-- CLOUDINARY_API_SECRET: Cloudinary API secret
+## 🏆 Certifications APIs
 
-Required Environment Variables (Frontend):
-- NEXT_PUBLIC_BACKEND_URL: Backend API base URL
-- RESEND_API_KEY         : Resend email API key
-- GMAIL_APP_PASSWORD     : Gmail app password (optional)
-- GMAIL_USER             : Gmail user (optional)
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/certifications` | No | List all active certifications |
+| POST | `/api/certifications` | Yes | Create new certification |
+| GET | `/api/certifications/[id]` | No | Get single certification |
+| PUT | `/api/certifications/[id]` | Yes | Update certification |
+| DELETE | `/api/certifications/[id]` | Yes | Delete certification |
+
+---
+
+## 📊 Analytics APIs
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/analytics` | Yes | Get visitor analytics |
+| POST | `/api/analytics` | No | Track visitor (called by frontend) |
+| GET | `/api/analytics/visitors` | Yes | Get visitor details |
+| GET | `/api/analytics/stats` | Yes | Get aggregated stats |
+
+---
+
+## 📕 Guestbook APIs
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/api/guestbook` | No | List approved guestbook entries |
+| POST | `/api/guestbook` | No | Submit new guestbook entry |
+| GET | `/api/guestbook/[id]` | Yes | Get single entry |
+| PUT | `/api/guestbook/[id]` | Yes | Update/approve entry |
+| DELETE | `/api/guestbook/[id]` | Yes | Delete entry |
+| GET | `/api/guestbook/pending` | Yes | Get pending entries for approval |
+
+---
+
+## 📤 Upload API
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/upload` | Yes | Upload image to Cloudinary |
+
+---
+
+## 📋 Data Models
+
+### Project
+```json
+{
+  "title": "string (required)",
+  "slug": "string (required, unique)",
+  "description": "string (required)",
+  "projectMarkdown": "string (optional, rich content)",
+  "tags": ["string"],
+  "liveUrl": "string (optional)",
+  "githubUrl": "string (optional)",
+  "images": [{
+    "url": "string",
+    "caption": "string (optional)",
+    "showOnProject": "boolean"
+  }],
+  "active": "boolean (default: true)",
+  "featured": "boolean (default: false)",
+  "priority": "number (lower = first)"
+}
+```
+
+### Blog
+```json
+{
+  "title": "string (required)",
+  "slug": "string (required, unique)",
+  "description": "string (required)",
+  "tags": ["string"],
+  "link": "string (optional, external link)",
+  "image": "string (optional, cover image)",
+  "active": "boolean",
+  "featured": "boolean"
+}
+```
+
+### Certification
+```json
+{
+  "title": "string (required)",
+  "slug": "string (required, unique)",
+  "description": "string (required)",
+  "tags": ["string"],
+  "link": "string (optional)",
+  "image": "string (optional)",
+  "issuer": "string (required)",
+  "issueDate": "date (required)",
+  "expiryDate": "date (optional)",
+  "credentialId": "string (optional)",
+  "pdf": "string (optional, PDF URL)",
+  "active": "boolean",
+  "featured": "boolean"
+}
+```
+
+---
+
+## 🚀 Vercel Deployment Steps
+
+### 1. Push to GitHub
+```bash
+cd backend
+git add .
+git commit -m "Ready for Vercel deployment"
+git push origin main
+```
+
+### 2. Import to Vercel
+1. Go to vercel.com → New Project
+2. Import your GitHub repository
+3. Select the `backend` folder as root directory
+
+### 3. Add Environment Variables in Vercel Dashboard
+| Variable | Value |
+|----------|-------|
+| `MONGODB_URI` | mongodb+srv://... |
+| `JWT_SECRET` | your_secret_key |
+| `CLOUDINARY_CLOUD_NAME` | dedm8zbh4 |
+| `CLOUDINARY_API_KEY` | 745854171693991 |
+| `CLOUDINARY_API_SECRET` | RIIeo88lbB1QA0dxvSw9rNsy10k |
+
+### 4. Deploy!
+Click "Deploy" and wait for build to complete.
+
+---
+
+## 🔧 Admin Panel
+
+**Local**: http://localhost:4000/admin
+**Production**: https://your-backend.vercel.app/admin
+
+**Login Credentials**:
+- Email: `401anshgajera@gmail.com`
+- Password: `test`
+
+---
+
+## ✅ Deployment Checklist
+
+- [x] Next.js 16 with App Router
+- [x] Mongoose with cached connection (Vercel-compatible)
+- [x] CORS headers on all API routes
+- [x] vercel.json configured
+- [x] Environment variables documented
+- [x] Cloudinary integration for uploads
+- [x] JWT authentication with httpOnly cookies
+- [x] Admin panel for content management
