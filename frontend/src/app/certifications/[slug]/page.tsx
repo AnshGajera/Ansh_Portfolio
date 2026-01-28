@@ -38,17 +38,17 @@ function CertificationDetailPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-100 dark:bg-gray-900 flex items-center justify-center">
-                <div className="animate-pulse text-xl">Loading certification...</div>
+            <div className="min-h-screen bg-white dark:bg-zinc-950 flex items-center justify-center">
+                <div className="animate-pulse text-xl text-zinc-600 dark:text-zinc-400">Loading certification...</div>
             </div>
         );
     }
 
     if (error || !certification) {
         return (
-            <div className="min-h-screen bg-slate-100 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
-                <h1 className="text-3xl text-gray-900 dark:text-white">Certification Not Found</h1>
-                <p className="text-gray-600 dark:text-gray-400">The certification you&apos;re looking for doesn&apos;t exist.</p>
+            <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center gap-4">
+                <h1 className="text-3xl text-zinc-900 dark:text-white">Certification Not Found</h1>
+                <p className="text-zinc-600 dark:text-zinc-400">The certification you&apos;re looking for doesn&apos;t exist.</p>
                 <Link
                     href="/#certifications"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mt-4"
@@ -62,19 +62,19 @@ function CertificationDetailPage() {
     const mainImage = certification.image || "/assets/certifications/default-cert.png";
 
     return (
-        <div className="min-h-screen bg-slate-100 dark:bg-gray-900">
+        <div className="min-h-screen bg-white dark:bg-zinc-950">
             <div className="max-w-4xl mx-auto px-4 py-16">
                 {/* Back button */}
                 <Link
                     href="/#certifications"
-                    className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-8 transition-colors"
+                    className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white mb-8 transition-colors"
                 >
                     ← Back to Certifications
                 </Link>
 
                 {/* Certification Header - Dark text above */}
                 <div className="mb-8">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                    <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
                         {certification.title}
                     </h1>
 
@@ -86,7 +86,7 @@ function CertificationDetailPage() {
                                 {certification.tags.map((tag, idx) => (
                                     <span
                                         key={idx}
-                                        className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm"
+                                        className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1 rounded-full text-sm"
                                     >
                                         {tag}
                                     </span>
@@ -95,7 +95,7 @@ function CertificationDetailPage() {
                         )}
 
                         {/* Issuer and date info */}
-                        <div className="text-gray-600 dark:text-gray-400">
+                        <div className="text-zinc-600 dark:text-zinc-400">
                             <p className="font-medium">Issued by {certification.issuer}</p>
                             <div className="flex items-center gap-2 mt-1">
                                 <Calendar className="w-4 h-4" />

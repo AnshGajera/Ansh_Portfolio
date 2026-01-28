@@ -30,17 +30,13 @@ const AboutSection = () => {
 
                     <BoxReveal width="100%" delay={0.2}>
                         <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6 font-medium">
-                            Hey there! I&apos;m Ansh, a Computer Science Engineer with experience in Development, DevOps and
-                            Database management with hands-on experience in deploying & automating workflows, and
-                            collaborating with clients.
+                            I&apos;m Ansh, a B.Tech Artificial Intelligence &amp; Machine Learning student interested in building practical, real-world intelligent systems. I work across the AIML stack, from data understanding and machine learning to automation and system-level design.
                         </p>
                     </BoxReveal>
 
                     <BoxReveal width="100%" delay={0.4}>
                         <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
-                            Strong analytical skills, effective communication, and a team-oriented approach to driving process
-                            improvements and delivering results. When I&apos;m not coding, you can find me exploring new technologies
-                            or sipping coffee while brainstorming my next project.
+                            I&apos;ve built fully functional websites and applications using modern development practices and AI-assisted workflows, with a focus on clean architecture, logical reasoning, and scalable solutions.
                         </p>
                     </BoxReveal>
                 </div>

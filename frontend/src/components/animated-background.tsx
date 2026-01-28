@@ -68,41 +68,41 @@ const STATES = {
   },
   projects: {
     desktop: {
-      scale: { x: 0.35, y: 0.35, z: 0.35 },
-      position: { x: 0, y: 50, z: 0 },
+      scale: { x: 0.3, y: 0.3, z: 0.3 },
+      position: { x: 0, y: -40, z: 0 },
       rotation: {
-        x: Math.PI / 12,
-        y: 0,
-        z: 0,
+        x: Math.PI,
+        y: Math.PI / 3,
+        z: Math.PI,
       },
     },
     mobile: {
-      scale: { x: 0.2, y: 0.2, z: 0.2 },
+      scale: { x: 0.18, y: 0.18, z: 0.18 },
       position: { x: 0, y: 150, z: 0 },
       rotation: {
-        x: Math.PI / 12,
-        y: 0,
-        z: 0,
+        x: Math.PI,
+        y: Math.PI / 3,
+        z: Math.PI,
       },
     },
   },
   certifications: {
     desktop: {
-      scale: { x: 0.35, y: 0.35, z: 0.35 },
-      position: { x: 0, y: 50, z: 0 },
+      scale: { x: 0.3, y: 0.3, z: 0.3 },
+      position: { x: 0, y: -40, z: 0 },
       rotation: {
-        x: Math.PI / 12,
-        y: 0,
-        z: 0,
+        x: Math.PI,
+        y: Math.PI / 3,
+        z: Math.PI,
       },
     },
     mobile: {
-      scale: { x: 0.2, y: 0.2, z: 0.2 },
+      scale: { x: 0.18, y: 0.18, z: 0.18 },
       position: { x: 0, y: 150, z: 0 },
       rotation: {
-        x: Math.PI / 12,
-        y: 0,
-        z: 0,
+        x: Math.PI,
+        y: Math.PI / 3,
+        z: Math.PI,
       },
     },
   },
@@ -148,6 +148,14 @@ const AnimatedBackground = () => {
     stop: () => void;
   }>();
 
+  const audioPress = useRef<HTMLAudioElement | undefined>(undefined);
+  const audioRelease = useRef<HTMLAudioElement | undefined>(undefined);
+
+  useEffect(() => {
+    audioPress.current = new Audio("/assets/keycap-sound/public_assets_keycap-sounds_press.mp3");
+    audioRelease.current = new Audio("/assets/keycap-sound/public_assets_keycap-sounds_release.mp3");
+  }, []);
+
   const keyboardStates = (section: Section) => {
     return STATES[section][isMobile ? "mobile" : "desktop"];
   };
@@ -156,6 +164,12 @@ const AnimatedBackground = () => {
     if (!splineApp || selectedSkill?.name === e.target.name) return;
 
     if (e.target.name === "body" || e.target.name === "platform") {
+      if (selectedSkill) {
+        if (audioRelease.current) {
+          audioRelease.current.currentTime = 0;
+          audioRelease.current.play().catch(() => { });
+        }
+      }
       setSelectedSkill(null);
       if (splineApp.getVariable("heading") && splineApp.getVariable("desc")) {
         splineApp.setVariable("heading", "");
@@ -163,6 +177,14 @@ const AnimatedBackground = () => {
       }
     } else {
       if (!selectedSkill || selectedSkill.name !== e.target.name) {
+        if (selectedSkill && audioRelease.current) {
+          audioRelease.current.currentTime = 0;
+          audioRelease.current.play().catch(() => { });
+        }
+        if (audioPress.current) {
+          audioPress.current.currentTime = 0;
+          audioPress.current.play().catch(() => { });
+        }
         const skill = SKILLS[e.target.name as SkillNames];
         setSelectedSkill(skill);
       }
@@ -264,7 +286,7 @@ const AnimatedBackground = () => {
           paused: true,
         }
       );
-      if (["hero", "skills", "projects", "certifications"].includes(activeSection)) {
+      if (activeSection === "hero") {
         rotateKeyboard.restart();
         teardownKeyboard.pause();
       } else if (activeSection === "contact") {
@@ -366,15 +388,25 @@ const AnimatedBackground = () => {
     if (!splineApp) return;
     splineApp.addEventListener("keyUp", (e) => {
       if (!splineApp) return;
+      if (audioRelease.current) {
+        audioRelease.current.currentTime = 0;
+        audioRelease.current.play().catch(() => { });
+      }
       splineApp.setVariable("heading", "");
       splineApp.setVariable("desc", "");
     });
     splineApp.addEventListener("keyDown", (e) => {
       if (!splineApp) return;
+      if (audioPress.current) {
+        audioPress.current.currentTime = 0;
+        audioPress.current.play().catch(() => { });
+      }
       const skill = SKILLS[e.target.name as SkillNames];
-      if (skill) setSelectedSkill(skill);
-      splineApp.setVariable("heading", skill.label);
-      splineApp.setVariable("desc", skill.shortDescription);
+      if (skill) {
+        setSelectedSkill(skill);
+        splineApp.setVariable("heading", skill.label);
+        splineApp.setVariable("desc", skill.shortDescription);
+      }
     });
     splineApp.addEventListener("mouseHover", handleMouseHover);
   };
@@ -622,7 +654,6 @@ const AnimatedBackground = () => {
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <Spline
-          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1 }}
           ref={splineContainer}
           onLoad={(app: Application) => {
             setSplineApp(app);

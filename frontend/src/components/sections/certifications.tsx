@@ -79,12 +79,15 @@ const CertificationsSection = () => {
         ))}
       </div>
       <div className="flex justify-center mt-12">
-        <Link href="/certifications">
-          <Button variant="outline" size="lg" className="group text-lg px-8 py-6 rounded-full border-2 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300">
-            View All Certifications
-            <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </Link>
+        <Button 
+          variant="outline" 
+          size="lg" 
+          className="group text-lg px-8 py-6 rounded-full border-2 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
+          onClick={() => window.location.href = '/certifications'}
+        >
+          View All Certifications
+          <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+        </Button>
       </div>
     </section>
   );

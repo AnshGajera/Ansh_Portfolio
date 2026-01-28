@@ -31,7 +31,7 @@ const config = {
     "Azure",
   ],
   author: "Ansh Gajera",
-  email: "anshgajera@gmail.com", // TODO: Update with your real email
+  email: "401anshgajera@gmail.com",
   site: "https://anshgajera.com", // TODO: Update with your real site
 
   get ogImg() {

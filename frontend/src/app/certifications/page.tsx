@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchCertifications, BackendCertification } from "@/lib/api";
 import { ArrowLeft, Calendar } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function CertificationsPage() {
     const [certifications, setCertifications] = useState<BackendCertification[]>([]);
@@ -27,12 +28,16 @@ function CertificationsPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-100 dark:bg-gray-900 py-16 px-4 md:px-8">
+        <div className="min-h-screen bg-white dark:bg-zinc-950 py-16 px-4 md:px-8">
             <div className="max-w-7xl mx-auto">
-                <Link href="/" className="inline-flex items-center gap-2 text-primary mb-8 hover:underline">
+                <Link href="/" className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors mb-8">
                     <ArrowLeft size={20} /> Back to Home
                 </Link>
-                <h1 className="text-4xl font-bold mb-12 text-center text-gray-900 dark:text-white">All Certifications</h1>
+                <h1 className={cn(
+                    "bg-clip-text text-4xl text-center text-transparent md:text-6xl mb-12",
+                    "bg-gradient-to-b from-black/80 to-black/50",
+                    "dark:bg-gradient-to-b dark:from-white/80 dark:to-white/20"
+                )}>All Certifications</h1>
 
                 {loading ? (
                     <div className="text-center text-xl animate-pulse">Loading certifications...</div>
