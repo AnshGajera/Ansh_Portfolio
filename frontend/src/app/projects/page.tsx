@@ -1,117 +1,24 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-// @ts-ignore
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css/core";
-import "@splidejs/react-splide/css";
 import { fetchProjects, BackendProject } from "@/lib/api";
+import { ArrowLeft } from "lucide-react";
 
-// Static fallback projects (original data)
-const STATIC_PROJECTS = [
-  {
-    id: 1,
-    name: "AI Dockerfile optimizer",
-    description: `AI-Docker-file-optimizer helps optimize Dockerfiles for smaller, more efficient images. 
-            Simply paste your Dockerfile, and the app analyzes it for best practices and size 
-            optimization tips. It then provides a refactored, optimized version of the Dockerfile. 
-            Deployed on Vercel, it ensures fast and easy access to Dockerfile optimization.`,
-    link: "https://ai-docker-file-optimizer.netlify.app/",
-    images: [
-      "/assets/projects-screenshots/aidockerfileoptimizer/1.png",
-      "/assets/projects-screenshots/aidockerfileoptimizer/2.png",
-      "/assets/projects-screenshots/aidockerfileoptimizer/3.png",
-    ],
-  },
-  {
-    id: 2,
-    name: "financeme",
-    description: `This project demonstrates the deployment of a DevOps pipeline for a global banking and
-            financial services provider, FinanceMe. The company transitioned from a monolithic 
-            architecture to a microservice-based architecture to handle increased traffic and 
-            scaling challenges. The project involves automating infrastructure provisioning, build 
-            and deployment processes, and continuous monitoring using modern DevOps tools and 
-            AWS services.`,
-    link: "https://github.com/Abhiz2411/FinanceMe-Devops-Project-01",
-    images: [
-      "/assets/projects-screenshots/financeme/1.png",
-      "/assets/projects-screenshots/financeme/2.png",
-      "/assets/projects-screenshots/financeme/3.png",
-      "/assets/projects-screenshots/financeme/4.png",
-      "/assets/projects-screenshots/financeme/5.png",
-      "/assets/projects-screenshots/financeme/6.png",
-      "/assets/projects-screenshots/financeme/7.png",
-      "/assets/projects-screenshots/financeme/8.png",
-      "/assets/projects-screenshots/financeme/9.png",
-      "/assets/projects-screenshots/financeme/10.png"
-    ],
-  },
-  {
-    id: 3,
-    name: "Portfolio",
-    description: `Welcome to my digital playground, where creativity meets code in the
-            dopest way possible.`,
-    link: "https://www.abhijitzende.com/",
-    images: [
-      "/assets/projects-screenshots/myportfolio/landing.png",
-      "/assets/projects-screenshots/myportfolio/navbar.png",
-      "/assets/projects-screenshots/myportfolio/projects.png",
-      "/assets/projects-screenshots/myportfolio/project.png",
-    ],
-  },
-  {
-    id: 4,
-    name: "Smart Parking Assistant",
-    description: `Transform parking with the Smart Parking Assistant, an IoT marvel powered by Arduino 
-            and IR sensors to detect and recommend the best spots in real-time. Enjoy a sleek GUI 
-            that visualizes availability and an intelligent system for quick, optimal decisions. 
-            Built to adapt with customizable hardware and Python-powered software for seamless 
-            integration. Say goodbye to parking woes and hello to smarter space utilization!`,
-    link: "https://github.com/Abhiz2411/smart-parking-assistant",
-    images: [
-      "/assets/projects-screenshots/smartparkingassitant/01.jpeg",
-      "/assets/projects-screenshots/smartparkingassitant/03.jpeg",
-      "/assets/projects-screenshots/smartparkingassitant/04.jpeg",
-    ],
-  },
-];
-
-interface ProjectDisplay {
-  id: number | string;
-  name: string;
-  description: string;
-  link: string;
-  images: string[];
-}
-
-// Map backend project to display format
-const mapBackendProject = (bp: BackendProject): ProjectDisplay => ({
-  id: bp._id,
-  name: bp.title,
-  description: bp.description,
-  link: bp.liveUrl || bp.githubUrl || "#",
-  images: bp.images?.map(img => img.url) || ["/assets/projects-screenshots/logo-dark.webp"],
-});
-
-function Page() {
-  const [projects, setProjects] = useState<ProjectDisplay[]>(STATIC_PROJECTS);
+function ProjectsPage() {
+  const [projects, setProjects] = useState<BackendProject[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadProjects() {
       try {
-        const backendData = await fetchProjects();
-        if (backendData && backendData.length > 0) {
-          const mapped = backendData
-            .filter(p => p.active !== false)
-            .sort((a, b) => (a.priority || 999) - (b.priority || 999))
-            .map(mapBackendProject);
-          setProjects(mapped);
-        }
-        // Keep static projects if backend has none
+        const data = await fetchProjects();
+        const activeProjects = data.filter(p => p.active !== false); // Simple active filter
+        // Sort by priority
+        activeProjects.sort((a, b) => (a.priority || 999) - (b.priority || 999));
+        setProjects(activeProjects);
       } catch (error) {
-        console.log("Using static projects - backend unavailable");
+        console.error("Failed to load projects", error);
       } finally {
         setLoading(false);
       }
@@ -120,66 +27,58 @@ function Page() {
   }, []);
 
   return (
-    <>
-      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-300 h-full">
-        <h1 className="text-4xl mt-[100px] mb-[50px]">Projects</h1>
-        <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 place-content-around">
-          {projects.map((project) => (
-            <li
-              className="w-[300px] h-[400px] border-[.5px] rounded-md border-zinc-600"
-              key={project.id}
-              style={{ backdropFilter: "blur(2px)" }}
-            >
-              <div className="h-[200px]">
-                <Splide
-                  options={{
-                    type: "loop",
-                    interval: 3000,
-                    autoplay: true,
-                    speed: 2000,
-                    perMove: 1,
-                    rewind: true,
-                    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-                    arrows: false,
-                  }}
-                  aria-label="Project Screenshots"
-                >
-                  {project.images.map((image) => (
-                    <SplideSlide key={image}>
-                      <Image
-                        src={image}
-                        alt={`screenshot of ${project.name}`}
-                        className="w-[300px] h-[200px] rounded-md bg-zinc-900 object-cover"
-                        width={300}
-                        height={400}
-                        style={{ height: "200px" }}
-                        unoptimized={image.startsWith("http")}
-                      />
-                    </SplideSlide>
-                  ))}
-                </Splide>
-              </div>
-              <div className="p-4 text-zinc-300">
-                <h2 className="text-xl">{project.name}</h2>
-                <p className="mt-2 text-xs text-zinc-500 line-clamp-4">
-                  {project.description}
-                </p>
-                {project.link && (
-                  <Link
-                    href={project.link}
-                    target="_blank"
-                    className="text-xs text-blue-400 hover:text-blue-300 mt-2 inline-block"
-                  >
-                    View Project →
-                  </Link>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+    <div className="min-h-screen bg-slate-100 dark:bg-gray-900 py-16 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto">
+        <Link href="/" className="inline-flex items-center gap-2 text-primary mb-8 hover:underline">
+          <ArrowLeft size={20} /> Back to Home
+        </Link>
+        <h1 className="text-4xl font-bold mb-12 text-center text-gray-900 dark:text-white">All Projects</h1>
+
+        {loading ? (
+          <div className="text-center text-xl animate-pulse">Loading projects...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+              <Link
+                key={project._id}
+                href={`/projects/${project.slug}`}
+                className="group block bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 dark:border-zinc-800"
+              >
+                <div className="relative w-full h-48 overflow-hidden">
+                  <Image
+                    src={project.images && project.images.length > 0 ? project.images[0].url : "/assets/placeholder.jpg"}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized={project.images?.[0]?.url.startsWith("http")}
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags && project.tags.slice(0, 3).map((tag, idx) => (
+                      <span key={idx} className="bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 text-xs px-2 py-1 rounded">
+                        {tag}
+                      </span>
+                    ))}
+                    {project.tags && project.tags.length > 3 && (
+                      <span className="text-xs text-gray-400 self-center">+{project.tags.length - 3} more</span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
-export default Page;
+export default ProjectsPage;

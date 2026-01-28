@@ -22,7 +22,7 @@ const ContactForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/send", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ const ContactForm = () => {
         }),
       });
       const data = await res.json();
-      if (data.error) throw new Error(data.error);
+      if (!data.success) throw new Error(data.error || 'Failed to send message');
       toast({
         title: "Thank you!",
         description: "I'll get back to you as soon as possible.",

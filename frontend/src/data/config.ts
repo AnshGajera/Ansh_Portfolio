@@ -38,7 +38,7 @@ const config = {
     return this.site + "/assets/seo/og-image.png";
   },
   social: {
-    twitter: "https://x.com/AnshGajera", // TODO: Update with your real Twitter
+    twitter: "https://x.com/ansh_gajera", // TODO: Update with your real Twitter
     linkedin: "https://www.linkedin.com/in/ansh-gajera/", // TODO: Update with your real LinkedIn
     instagram: "https://www.instagram.com/anshgajera/", // TODO: Update with your real Instagram
     facebook: "https://www.facebook.com/anshgajera", // TODO: Update with your real Facebook

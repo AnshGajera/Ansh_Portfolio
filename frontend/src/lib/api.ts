@@ -1,5 +1,5 @@
 // API Service for fetching data from backend
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000').replace(/\/$/, '');
 
 // Project type from backend
 export interface BackendProject {
@@ -76,8 +76,8 @@ export async function fetchProjects(): Promise<BackendProject[]> {
             return [];
         }
 
-        const json: ApiResponse<BackendProject[]> = await res.json();
-        return json.data || [];
+        const json: ApiResponse<{ items: BackendProject[]; total: number; page: number; limit: number }> = await res.json();
+        return json.success && json.data ? json.data.items : [];
     } catch (error) {
         console.error('Error fetching projects:', error);
         return [];
@@ -87,20 +87,26 @@ export async function fetchProjects(): Promise<BackendProject[]> {
 // Fetch single project by slug
 export async function fetchProjectBySlug(slug: string): Promise<BackendProject | null> {
     try {
-        const res = await fetch(`${API_URL}/api/projects/${slug}`, {
+        const url = `${API_URL}/api/projects/${slug}`;
+        console.log('[API] Fetching project from:', url);
+
+        const res = await fetch(url, {
             cache: 'no-store',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
+        console.log('[API] Response status:', res.status);
+
         if (!res.ok) {
-            console.error('Failed to fetch project:', res.status);
+            console.error('[API] Failed to fetch project:', res.status);
             return null;
         }
 
         const json: ApiResponse<BackendProject> = await res.json();
-        return json.data || null;
+        console.log('[API] Response JSON:', JSON.stringify(json).substring(0, 200));
+        return json.success && json.data ? json.data : null;
     } catch (error) {
         console.error('Error fetching project:', error);
         return null;
@@ -145,10 +151,33 @@ export async function fetchCertifications(): Promise<BackendCertification[]> {
             return [];
         }
 
-        const json: ApiResponse<BackendCertification[]> = await res.json();
-        return json.data || [];
+        const json: ApiResponse<{ items: BackendCertification[]; total: number; page: number; limit: number }> = await res.json();
+        return json.success && json.data ? json.data.items : [];
     } catch (error) {
         console.error('Error fetching certifications:', error);
         return [];
+    }
+}
+
+// Fetch single certification by slug
+export async function fetchCertificationBySlug(slug: string): Promise<BackendCertification | null> {
+    try {
+        const res = await fetch(`${API_URL}/api/certifications/${slug}`, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            console.error('Failed to fetch certification:', res.status);
+            return null;
+        }
+
+        const json: ApiResponse<BackendCertification> = await res.json();
+        return json.success && json.data ? json.data : null;
+    } catch (error) {
+        console.error('Error fetching certification:', error);
+        return null;
     }
 }

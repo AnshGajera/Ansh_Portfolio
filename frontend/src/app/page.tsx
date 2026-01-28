@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 import AnimatedBackground from "@/components/animated-background";
 import SkillsSection from "@/components/sections/skills";
 import ProjectsSection from "@/components/sections/projects";
+import CertificationsSection from "@/components/sections/certifications";
 import ContactSection from "@/components/sections/contact";
 import HeroSection from "@/components/sections/hero";
+import AboutSection from "@/components/sections/about";
 
 function MainPage() {
   return (
@@ -18,8 +20,10 @@ function MainPage() {
             <AnimatedBackground />
           </div>
           <HeroSection />
+          <AboutSection />
           <SkillsSection />
           <ProjectsSection />
+          <CertificationsSection />
           <ContactSection />
         </main>
       </SmoothScroll>

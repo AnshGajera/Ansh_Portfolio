@@ -53,6 +53,12 @@ const SocketContextProvider = ({ children }: { children: ReactNode }) => {
 
   // SETUP SOCKET.IO
   useEffect(() => {
+    // Only connect if WS_URL is configured
+    if (!process.env.NEXT_PUBLIC_WS_URL) {
+      console.log("WebSocket URL not configured, skipping socket connection");
+      return;
+    }
+
     const username =  localStorage.getItem("username") || generateRandomCursor().name
     const socket = io(process.env.NEXT_PUBLIC_WS_URL!, {
       query: { username },

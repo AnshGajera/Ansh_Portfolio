@@ -68,21 +68,41 @@ const STATES = {
   },
   projects: {
     desktop: {
-      scale: { x: 0.3, y: 0.3, z: 0.3 },
-      position: { x: 0, y: -40, z: 0 },
+      scale: { x: 0.35, y: 0.35, z: 0.35 },
+      position: { x: 0, y: 50, z: 0 },
       rotation: {
-        x: Math.PI,
-        y: Math.PI / 3,
-        z: Math.PI,
+        x: Math.PI / 12,
+        y: 0,
+        z: 0,
       },
     },
     mobile: {
-      scale: { x: 0.18, y: 0.18, z: 0.18 },
+      scale: { x: 0.2, y: 0.2, z: 0.2 },
       position: { x: 0, y: 150, z: 0 },
       rotation: {
-        x: Math.PI,
-        y: Math.PI / 3,
-        z: Math.PI,
+        x: Math.PI / 12,
+        y: 0,
+        z: 0,
+      },
+    },
+  },
+  certifications: {
+    desktop: {
+      scale: { x: 0.35, y: 0.35, z: 0.35 },
+      position: { x: 0, y: 50, z: 0 },
+      rotation: {
+        x: Math.PI / 12,
+        y: 0,
+        z: 0,
+      },
+    },
+    mobile: {
+      scale: { x: 0.2, y: 0.2, z: 0.2 },
+      position: { x: 0, y: 150, z: 0 },
+      rotation: {
+        x: Math.PI / 12,
+        y: 0,
+        z: 0,
       },
     },
   },
@@ -108,7 +128,7 @@ const STATES = {
   },
 };
 
-type Section = "hero" | "about" | "skills" | "projects" | "contact";
+type Section = "hero" | "about" | "skills" | "projects" | "certifications" | "contact";
 
 const AnimatedBackground = () => {
   const { isLoading, bypassLoading } = usePreloader();
@@ -244,7 +264,7 @@ const AnimatedBackground = () => {
           paused: true,
         }
       );
-      if (activeSection === "hero") {
+      if (["hero", "skills", "projects", "certifications"].includes(activeSection)) {
         rotateKeyboard.restart();
         teardownKeyboard.pause();
       } else if (activeSection === "contact") {
@@ -258,7 +278,7 @@ const AnimatedBackground = () => {
         splineApp.setVariable("heading", "");
         splineApp.setVariable("desc", "");
       }
-      if (activeSection === "projects") {
+      if (["projects", "certifications"].includes(activeSection)) {
         await sleep(300);
         bongoAnimation?.start();
       } else {
@@ -447,6 +467,45 @@ const AnimatedBackground = () => {
     });
     gsap.timeline({
       scrollTrigger: {
+        trigger: "#certifications",
+        start: "top 70%",
+        end: "bottom bottom",
+        scrub: true,
+        // markers: true,
+        onEnter: () => {
+          setActiveSection("certifications");
+          gsap.to(kbd.scale, {
+            ...keyboardStates("certifications").scale,
+            duration: 1,
+          });
+          gsap.to(kbd.position, {
+            ...keyboardStates("certifications").position,
+            duration: 1,
+          });
+          gsap.to(kbd.rotation, {
+            ...keyboardStates("certifications").rotation,
+            duration: 1,
+          });
+        },
+        onLeaveBack: () => {
+          setActiveSection("projects");
+          gsap.to(kbd.scale, {
+            ...keyboardStates("projects").scale,
+            duration: 1,
+          });
+          gsap.to(kbd.position, {
+            ...keyboardStates("projects").position,
+            duration: 1,
+          });
+          gsap.to(kbd.rotation, {
+            ...keyboardStates("projects").rotation,
+            duration: 1,
+          });
+        },
+      },
+    });
+    gsap.timeline({
+      scrollTrigger: {
         trigger: "#contact",
         start: "top 30%",
         end: "bottom bottom",
@@ -468,17 +527,17 @@ const AnimatedBackground = () => {
           });
         },
         onLeaveBack: () => {
-          setActiveSection("projects");
+          setActiveSection("certifications");
           gsap.to(kbd.scale, {
-            ...keyboardStates("projects").scale,
+            ...keyboardStates("certifications").scale,
             duration: 1,
           });
           gsap.to(kbd.position, {
-            ...keyboardStates("projects").position,
+            ...keyboardStates("certifications").position,
             duration: 1,
           });
           gsap.to(kbd.rotation, {
-            ...keyboardStates("projects").rotation,
+            ...keyboardStates("certifications").rotation,
             duration: 1,
           });
           // gsap.to(kbd.rotation, { x: 0, duration: 1 });
@@ -491,7 +550,7 @@ const AnimatedBackground = () => {
     const frame1 = splineApp?.findObjectByName("frame-1");
     const frame2 = splineApp?.findObjectByName("frame-2");
     if (!frame1 || !frame2 || !framesParent)
-      return { start: () => {}, stop: () => {} };
+      return { start: () => { }, stop: () => { } };
 
     let interval: NodeJS.Timeout;
     const start = () => {
@@ -517,7 +576,7 @@ const AnimatedBackground = () => {
     return { start, stop };
   };
   const getKeycapsAnimation = () => {
-    if (!splineApp) return { start: () => {}, stop: () => {} };
+    if (!splineApp) return { start: () => { }, stop: () => { } };
 
     let tweens: gsap.core.Tween[] = [];
     const start = () => {

@@ -61,10 +61,16 @@ export async function createCertificationHandler(request: NextRequest, verifyTok
   }
 }
 
-export async function getCertificationHandler(request: NextRequest, id: string) {
+export async function getCertificationHandler(request: NextRequest, idOrSlug: string) {
   try {
     await dbConnect();
-    const certification = await service.getCertificationById(id);
+    // Try to get certification by ID first, then by slug if that fails
+    let certification = await service.getCertificationById(idOrSlug);
+    if (!certification) {
+      // If not found by ID, try by slug
+      const result = await service.listCertifications({ slug: idOrSlug, limit: 1 });
+      certification = result.items[0] || null;
+    }
     if (!certification) return build(false, 'Certification not found');
     return build(true, 'Certification fetched', certification);
   } catch (err) {

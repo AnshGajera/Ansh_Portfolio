@@ -92,6 +92,9 @@ function ElasticCursor() {
     set.sx = gsap.quickSetter(jellyRef.current, "scaleX");
     set.sy = gsap.quickSetter(jellyRef.current, "scaleY");
     set.width = gsap.quickSetter(jellyRef.current, "width", "px");
+
+    // Initialize center transform to maintain alignment
+    gsap.set(jellyRef.current, { xPercent: -50, yPercent: -50 });
   }, []);
 
   // Start Animation loop

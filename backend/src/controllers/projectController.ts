@@ -65,10 +65,28 @@ export async function createProjectHandler(request: NextRequest, verifyToken: (t
   }
 }
 
-export async function getProjectHandler(request: NextRequest, id: string) {
+export async function getProjectHandler(request: NextRequest, idOrSlug: string) {
   try {
     await dbConnect();
-    const project = await service.getProjectById(id);
+    // Try to get project by ID first (if valid ObjectId), then by slug if that fails
+    let project = null;
+
+    // Check if valid hex string (24 chars) to avoid CastError
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
+
+    if (isObjectId) {
+      try {
+        project = await service.getProjectById(idOrSlug);
+      } catch (e) {
+        // ignore cast error if any
+      }
+    }
+
+    if (!project) {
+      // If not found by ID or invalid ID, try by slug
+      const result = await service.listProjects({ slug: idOrSlug, limit: 1 });
+      project = result.items[0] || null;
+    }
     if (!project) return build(false, 'Project not found');
     return build(true, 'Project fetched', project);
   } catch (err) {
