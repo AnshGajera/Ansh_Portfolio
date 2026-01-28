@@ -111,7 +111,7 @@ export async function deleteCertificationHandler(request: NextRequest, id: strin
     await dbConnect();
     const deleted = await service.deleteCertification(id);
     if (!deleted) return build(false, 'Certification not found');
-    return build(false, 'Certification deleted');
+    return build(true, 'Certification deleted');
   } catch (err) {
     console.error('deleteCertificationHandler', err);
     return build(false, 'Failed to delete certification');

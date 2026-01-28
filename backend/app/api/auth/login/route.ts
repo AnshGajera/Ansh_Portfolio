@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const admin = await Admin.findOne({ email });
+    console.log('Login attempt:', { email, adminFound: !!admin });
     if (!admin) {
       return NextResponse.json({ error: 'Invalid credentials' }, {
         status: 401,

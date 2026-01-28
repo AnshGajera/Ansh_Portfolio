@@ -58,6 +58,7 @@ export default function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 mb-4 bg-neutral-700 border border-neutral-600 rounded text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
+          suppressHydrationWarning
         />
         <input
           type="password"
@@ -66,11 +67,13 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 mb-4 bg-neutral-700 border border-neutral-600 rounded text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
+          suppressHydrationWarning
         />
         <button
           type="submit"
           className="w-full btn-accent p-2 rounded-md font-medium flex items-center justify-center"
           disabled={loading}
+          suppressHydrationWarning
         >
           {loading ? (
             <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">

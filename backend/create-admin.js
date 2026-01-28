@@ -20,7 +20,7 @@ const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
 
 async function createAdmin() {
   // Note: @ in password is URL encoded as %40
-  const uri = "mongodb+srv://23aiml019:%40nsh2785@anshportfolio.knvdhhp.mongodb.net/?appName=AnshPortfolio";
+  const uri = "mongodb+srv://23aiml019:%40nsh2785@anshportfolio.knvdhhp.mongodb.net/portfolio?retryWrites=true&w=majority";
   if (!uri) {
     console.error('Please set MONGODB_URI environment variable');
     process.exit(1);
@@ -39,7 +39,7 @@ async function createAdmin() {
 
     // Create admin user
     const email = '401anshgajera@gmail.com';
-    const password = 'test';
+    const password = 'ansh';
     const passwordHash = await bcrypt.hash(password, 12);
 
     const admin = new Admin({
