@@ -1,0 +1,99 @@
+{
+  "info": {
+    "name": "GitHub Full Repo + README Export",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "github_token",
+      "value": "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"
+    },
+    {
+      "key": "username",
+      "value": "AnshGajera"
+    },
+    {
+      "key": "repo_index",
+      "value": "0"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - Get All Repositories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{github_token}}"
+          }
+        ],
+        "url": "https://api.github.com/user/repos?per_page=100"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let repos = pm.response.json();",
+              "pm.environment.set('repos', JSON.stringify(repos));",
+              "pm.environment.set('repo_index', 0);",
+              "pm.environment.set('final', JSON.stringify([]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - Loop Readmes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{github_token}}"
+          }
+        ],
+        "url": "https://api.github.com/repos/{{username}}/{{repo}}/readme"
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "let repos = JSON.parse(pm.environment.get('repos'));",
+              "let i = parseInt(pm.environment.get('repo_index'));",
+              "if(i >= repos.length){ postman.setNextRequest(null); return; }",
+              "pm.environment.set('repo', repos[i].name);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let repos = JSON.parse(pm.environment.get('repos'));",
+              "let i = parseInt(pm.environment.get('repo_index'));",
+              "let final = JSON.parse(pm.environment.get('final'));",
+              "let r = repos[i];",
+              "let readme = '';",
+              "try{ readme = Buffer.from(pm.response.json().content,'base64').toString(); }catch(e){}",
+              "final.push({",
+              "  name: r.name,",
+              "  description: r.description,",
+              "  url: r.html_url,",
+              "  language: r.language,",
+              "  created: r.created_at,",
+              "  updated: r.updated_at,",
+              "  readme: readme",
+              "});",
+              "pm.environment.set('final', JSON.stringify(final));",
+              "pm.environment.set('repo_index', i+1);",
+              "postman.setNextRequest('2 - Loop Readmes');"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

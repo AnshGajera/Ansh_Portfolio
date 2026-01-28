@@ -62,7 +62,7 @@ Issuer: IBM (via Coursera)
 Issue Date: 06-08-2025
 Expiry Date: N/A
 Credential ID: AYR43LF8AVDD
-File: OM CHOKSI Machine_learning_IBM.pdf
+File: Ansh Gajera Machine_learning_IBM.pdf
 Active: Yes
 Featured: Yes
 

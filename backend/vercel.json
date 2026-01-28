@@ -24,10 +24,10 @@
     }
   ],
   "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "JWT_SECRET": "@jwt_secret",
-    "CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name",
-    "CLOUDINARY_API_KEY": "@cloudinary_api_key",
-    "CLOUDINARY_API_SECRET": "@cloudinary_api_secret"
+    "MONGODB_URI": "mongodb+srv://23aiml019:anshgajera@anshportfolio.knvdhhp.mongodb.net/portfolio?retryWrites=true&w=majority",
+    "JWT_SECRET": "ansh_portfolio_jwt_secret_2026",
+    "CLOUDINARY_CLOUD_NAME": "dedm8zbh4",
+    "CLOUDINARY_API_KEY": "745854171693991",
+    "CLOUDINARY_API_SECRET": "RIIeo88lbB1QA0dxvSw9rNsy10k"
   }
 }

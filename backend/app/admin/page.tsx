@@ -6,14 +6,26 @@ import Certification from '@/models/Certification';
 
 export default async function AdminDashboard() {
   // Query the database directly on the server to avoid internal HTTP calls
-  await dbConnect();
-  const totalProjects = (await Project.countDocuments()) || 0;
-  const featuredProjects = (await Project.countDocuments({ featured: true })) || 0;
-  const totalBlogs = (await Blog.countDocuments()) || 0;
-  console.log('Total blogs in DB:', totalBlogs);
-  const featuredBlogs = (await Blog.countDocuments({ featured: true })) || 0;
-  const totalCertifications = (await Certification.countDocuments()) || 0;
-  const featuredCertifications = (await Certification.countDocuments({ featured: true })) || 0;
+  let totalProjects = 0;
+  let featuredProjects = 0;
+  let totalBlogs = 0;
+  let featuredBlogs = 0;
+  let totalCertifications = 0;
+  let featuredCertifications = 0;
+
+  try {
+    await dbConnect();
+    totalProjects = (await Project.countDocuments()) || 0;
+    featuredProjects = (await Project.countDocuments({ featured: true })) || 0;
+    totalBlogs = (await Blog.countDocuments()) || 0;
+    console.log('Total blogs in DB:', totalBlogs);
+    featuredBlogs = (await Blog.countDocuments({ featured: true })) || 0;
+    totalCertifications = (await Certification.countDocuments()) || 0;
+    featuredCertifications = (await Certification.countDocuments({ featured: true })) || 0;
+  } catch (error) {
+    console.log('Database connection failed during build, using default values:', error);
+    // Use default values if database connection fails during build
+  }
 
   return (
     <div>

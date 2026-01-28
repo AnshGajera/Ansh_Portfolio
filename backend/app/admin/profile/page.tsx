@@ -4,7 +4,7 @@ export default function ProfilePage() {
       <h1 className="text-3xl font-bold mb-6">Profile</h1>
       <div className="prose max-w-none">
         <h2>Portfolio Owner Information</h2>
-        <p><strong>Name:</strong> Om Choksi</p>
+        <p><strong>Name:</strong> Ansh Gajera</p>
         <p><strong>Title:</strong> AI & Machine Learning Engineer</p>
         <p><strong>Tagline:</strong> <em>"I build practical AI systems that go beyond notebooks and deliver real-world impact."</em></p>
 
@@ -12,7 +12,7 @@ export default function ProfilePage() {
 
         <h2>Personal Profile & About</h2>
         <h3>About Me:</h3>
-        <p>"I’m Om Choksi — an AI & Machine Learning engineer focused on building deployable, production-ready intelligence systems. I specialize in transforming raw datasets into scalable ML products through end-to-end engineering, including data pipelines, model architecture, evaluation, and deployment."</p>
+        <p>"I’m Ansh Gajera — an AI & Machine Learning engineer focused on building deployable, production-ready intelligence systems. I specialize in transforming raw datasets into scalable ML products through end-to-end engineering, including data pipelines, model architecture, evaluation, and deployment."</p>
         <p>"My work spans ML model development, deep learning, computer vision, NLP, LLM-powered automation, full-stack ML application deployment, and data storytelling for business decisions. I believe AI is only successful when people — not just models — can use it."</p>
         <p>"I work with curiosity, speed, and product-thinking: every project I build must solve a real problem and make someone's workflow better."</p>
 
@@ -181,7 +181,7 @@ export default function ProfilePage() {
         <hr />
 
         <footer className="mt-8 text-center text-gray-500">
-          <p>&copy; 2025 Om Choksi. All rights reserved.</p>
+          <p>&copy; 2025 Ansh Gajera. All rights reserved.</p>
         </footer>
       </div>
     </div>
