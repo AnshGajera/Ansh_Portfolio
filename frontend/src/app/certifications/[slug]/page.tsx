@@ -48,7 +48,7 @@ function CertificationDetailPage() {
         return (
             <div className="min-h-screen bg-slate-100 dark:bg-gray-900 flex flex-col items-center justify-center gap-4">
                 <h1 className="text-3xl text-gray-900 dark:text-white">Certification Not Found</h1>
-                <p className="text-gray-600 dark:text-gray-400">The certification you're looking for doesn't exist.</p>
+                <p className="text-gray-600 dark:text-gray-400">The certification you&apos;re looking for doesn&apos;t exist.</p>
                 <Link
                     href="/#certifications"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mt-4"

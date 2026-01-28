@@ -51,7 +51,7 @@ function ProjectDetailPage() {
         return (
             <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center gap-4">
                 <h1 className="text-3xl text-zinc-900 dark:text-white">Project Not Found</h1>
-                <p className="text-zinc-500">The project you're looking for doesn't exist.</p>
+                <p className="text-zinc-500">The project you&apos;re looking for doesn&apos;t exist.</p>
                 <Link
                     href="/projects"
                     className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 mt-4"

@@ -51,3 +51,11 @@ export interface Certification {
   pdf?: string;
   featured: boolean;
 }
+
+// Navigation link type
+export interface Link {
+  title: string;
+  href: string;
+  thumbnail: string;
+  target?: string;
+}
