@@ -64,10 +64,22 @@ export async function createCertificationHandler(request: NextRequest, verifyTok
 export async function getCertificationHandler(request: NextRequest, idOrSlug: string) {
   try {
     await dbConnect();
-    // Try to get certification by ID first, then by slug if that fails
-    let certification = await service.getCertificationById(idOrSlug);
+    // Try to get certification by ID first (if valid ObjectId), then by slug if that fails
+    let certification = null;
+
+    // Check if valid hex string (24 chars) to avoid CastError
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
+
+    if (isObjectId) {
+      try {
+        certification = await service.getCertificationById(idOrSlug);
+      } catch (e) {
+        // ignore cast error if any
+      }
+    }
+
     if (!certification) {
-      // If not found by ID, try by slug
+      // If not found by ID or invalid ID, try by slug
       const result = await service.listCertifications({ slug: idOrSlug, limit: 1 });
       certification = result.items[0] || null;
     }

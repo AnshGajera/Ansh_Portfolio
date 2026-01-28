@@ -162,19 +162,25 @@ export async function fetchCertifications(): Promise<BackendCertification[]> {
 // Fetch single certification by slug
 export async function fetchCertificationBySlug(slug: string): Promise<BackendCertification | null> {
     try {
-        const res = await fetch(`${API_URL}/api/certifications/${slug}`, {
+        const url = `${API_URL}/api/certifications/${slug}`;
+        console.log('[API] Fetching certification from:', url);
+
+        const res = await fetch(url, {
             cache: 'no-store',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
+        console.log('[API] Certification response status:', res.status);
+
         if (!res.ok) {
-            console.error('Failed to fetch certification:', res.status);
+            console.error('[API] Failed to fetch certification:', res.status);
             return null;
         }
 
         const json: ApiResponse<BackendCertification> = await res.json();
+        console.log('[API] Certification response:', JSON.stringify(json).substring(0, 200));
         return json.success && json.data ? json.data : null;
     } catch (error) {
         console.error('Error fetching certification:', error);
