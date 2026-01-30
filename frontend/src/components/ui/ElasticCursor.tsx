@@ -203,7 +203,7 @@ function ElasticCursor() {
           "translate-x-[-50%] translate-y-[-50%]"
         )}
         style={{
-          zIndex: 100,
+          zIndex: 99999,
           backdropFilter: "invert(100%)",
         }}
       ></div>
@@ -212,6 +212,7 @@ function ElasticCursor() {
         style={{
           top: y,
           left: x,
+          zIndex: 99999,
           backdropFilter: "invert(100%)",
         }}
       ></div>
