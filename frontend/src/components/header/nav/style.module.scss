@@ -1,6 +1,6 @@
 .nav {
   overflow: hidden;
-  background: hsl(240 10% 3.9% / 0.95);
+  background: hsl(var(--background) / 0.95);
   backdrop-filter: blur(20px);
 
   .wrapper {
