@@ -1,5 +1,5 @@
 const config = {
-  email: "401anshgajera@gmail.com", // Update with your real email
+  email: "23aiml019@charusat.edu.in", // College email for contact form submissions
 };
 
 export { config };
