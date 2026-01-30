@@ -32,7 +32,7 @@ const config = {
   ],
   author: "Ansh Gajera",
   email: "401anshgajera@gmail.com",
-  site: "https://anshgajera.com", // TODO: Update with your real site
+  site: "https://www.anshgajera.dev",
 
   get ogImg() {
     return this.site + "/assets/seo/og-image.png";

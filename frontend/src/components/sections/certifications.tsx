@@ -70,18 +70,16 @@ const CertificationsSection = () => {
           Certifications
         </h2>
       </Link>
-      <div className="text-center mb-8 text-sm text-gray-500">
-        Loaded {certifications.length} certifications
-      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {certifications.map((cert) => (
           <CertificationCard key={cert._id} certification={cert} />
         ))}
       </div>
       <div className="flex justify-center mt-12">
-        <Button 
-          variant="outline" 
-          size="lg" 
+        <Button
+          variant="outline"
+          size="lg"
           className="group text-lg px-8 py-6 rounded-full border-2 border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
           onClick={() => window.location.href = '/certifications'}
         >

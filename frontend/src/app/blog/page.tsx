@@ -46,7 +46,9 @@ function Page() {
         {blogs.map((blog) => (
           <Link
             key={blog._id}
-            href={`/blog/${blog.slug}`}
+            href={blog.link || "#"}
+            target={blog.link ? "_blank" : undefined}
+            rel={blog.link ? "noopener noreferrer" : undefined}
             className="group block border-[.5px] border-zinc-600 rounded-md overflow-hidden bg-zinc-900/50 hover:bg-zinc-800/50 transition-colors"
           >
             {blog.image && (
