@@ -19,15 +19,16 @@ const NyanCat = () => {
     }[]
   >([]);
 
-  const spawnDiv = () => {
-    const newDiv = {
-      id: (Math.random() * 100000).toFixed(),
-    };
-    setDivs((prevDivs) => [...prevDivs, newDiv]);
-  };
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "n") spawnDiv();
+      if (e.key === "n" || e.key === "N") {
+        const newDiv = {
+          id: (Math.random() * 100000).toFixed(),
+        };
+        setDivs((prevDivs) => [...prevDivs, newDiv]);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
