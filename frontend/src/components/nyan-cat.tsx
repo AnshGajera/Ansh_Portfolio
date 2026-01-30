@@ -37,7 +37,7 @@ const NyanCat = () => {
   });
 
   return (
-    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[-1]">
+    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-50 pointer-events-none">
       <AnimatePresence>
         {divs.length > 0 && (
           <div className="fixed w-screen flex left-0 top-16">{divs.length}</div>
@@ -93,7 +93,7 @@ const AnimatedDiv = ({
     >
       <img
         src="/assets/nyan-cat.gif"
-        className={cn("fixed z-10 h-40 w-auto")}
+        className={cn("fixed z-50 h-40 w-auto pointer-events-auto")}
         alt="Nyan Cat"
       />
     </motion.div>
