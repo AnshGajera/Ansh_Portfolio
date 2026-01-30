@@ -12,7 +12,7 @@ const AboutSection = () => {
                     <BoxReveal width="100%">
                         <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-800 shadow-xl">
                             <img
-                                src="/assets/me.jpg"
+                                src="/assets/me2.jpg"
                                 alt="Ansh Gajera"
                                 className="w-full h-full object-cover"
                             />
