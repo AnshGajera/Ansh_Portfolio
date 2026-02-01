@@ -1,19 +1,54 @@
 "use client";
-import { useDevToolsOpen } from "@/hooks/use-devtools-open";
 import React, { useEffect, useState } from "react";
 import NyanCat from "./nyan-cat";
-import { AnimatePresence } from "framer-motion";
 
 const EasterEggs = () => {
   const [mounted, setMounted] = useState(false);
-  const { isDevToolsOpen } = useDevToolsOpen();
+  const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
   
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!isDevToolsOpen) return;
+    if (!mounted) return;
+    
+    let cleanupFn: (() => void) | undefined;
+    
+    const initDevToolsDetection = async () => {
+      try {
+        const detector = await import("devtools-detector");
+        detector.addListener((isOpen) => {
+          if (isOpen) {
+            setIsDevToolsOpen(true);
+            detector?.stop();
+          }
+        });
+        detector.launch();
+        
+        cleanupFn = () => {
+          try {
+            detector?.stop();
+          } catch (error) {
+            // Ignore cleanup errors
+          }
+        };
+      } catch (error) {
+        console.warn("DevTools detector failed to initialize:", error);
+      }
+    };
+    
+    initDevToolsDetection();
+    
+    return () => {
+      if (cleanupFn) {
+        cleanupFn();
+      }
+    };
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!isDevToolsOpen || !mounted) return;
     // console.log(
     //   "%cWhoa, look at you! 🕵️‍♂️\n\n" +
     //     "Peeking under the hood, eh? Just be careful, " +

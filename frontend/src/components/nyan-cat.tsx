@@ -46,21 +46,17 @@ const NyanCat = () => {
   return (
     <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[40] pointer-events-none">
       <AnimatePresence>
-        {divs.length > 0 && (
-          <div className="fixed w-screen flex left-0 top-16">{divs.length}</div>
-        )}
-      </AnimatePresence>
-      {divs &&
-        divs.map((div) => (
+        {divs.map((div) => (
           <AnimatedDiv
             key={div.id}
             id={div.id}
             onClick={() => console.log("clicked")}
             onCompleted={() => {
-              setDivs(divs.filter((d) => d.id !== div.id));
+              setDivs((prevDivs) => prevDivs.filter((d) => d.id !== div.id));
             }}
           />
         ))}
+      </AnimatePresence>
     </div>
   );
 };
@@ -95,13 +91,15 @@ const AnimatedDiv = ({
       key={id}
       initial={{ x: "-20vw", y: randY }}
       animate={controls}
+      exit={{ x: "100vw", opacity: 0 }}
       onAnimationComplete={onCompleted}
       onClick={handlePause}
     >
       <img
         src="/assets/nyan-cat.gif"
-        className={cn("fixed z-10 h-40 w-auto")}
+        className={cn("fixed z-10 h-40 w-auto pointer-events-auto")}
         alt="Nyan Cat"
+        draggable={false}
       />
     </motion.div>
   );
