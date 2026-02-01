@@ -8,45 +8,43 @@ import {
 } from "framer-motion";
 
 const getRandomHeight = () => {
-  return `${Math.random() * 80}vh`;
+  return `${Math.random() * 100}vh`;
 };
 
 const NyanCat = () => {
-  const [mounted, setMounted] = useState(false);
   const [divs, setDivs] = useState<
     {
       id: string;
     }[]
   >([]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const spawnDiv = () => {
+    const newDiv = {
+      id: (Math.random() * 100000).toFixed(),
+    };
+    setDivs((prevDivs) => [...prevDivs, newDiv]);
+  };
 
   useEffect(() => {
-    if (typeof window === "undefined" || !mounted) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "n" || e.key === "N") {
-        const newDiv = {
-          id: (Math.random() * 100000).toFixed(),
-        };
-        setDivs((prevDivs) => [...prevDivs, newDiv]);
-      }
+      if (e.key === "n" || e.key === "N") spawnDiv();
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [mounted]);
-
-  if (!mounted) return null;
+  }, []);
 
   return (
-    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[40] pointer-events-none">
+    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[-1]">
       <AnimatePresence>
-        {divs.map((div) => (
+        {divs.length > 0 && (
+          <div className="fixed w-screen flex left-0 top-16">{divs.length}</div>
+        )}
+      </AnimatePresence>
+      {divs &&
+        divs.map((div) => (
           <AnimatedDiv
             key={div.id}
             id={div.id}
@@ -56,7 +54,6 @@ const NyanCat = () => {
             }}
           />
         ))}
-      </AnimatePresence>
     </div>
   );
 };
@@ -70,7 +67,7 @@ const AnimatedDiv = ({
   onClick: () => void;
   onCompleted: () => void;
 }) => {
-  const [randY] = useState(() => getRandomHeight());
+  const randY = getRandomHeight();
 
   const controls = useAnimationControls();
 
@@ -91,15 +88,13 @@ const AnimatedDiv = ({
       key={id}
       initial={{ x: "-20vw", y: randY }}
       animate={controls}
-      exit={{ x: "100vw", opacity: 0 }}
       onAnimationComplete={onCompleted}
       onClick={handlePause}
     >
       <img
         src="/assets/nyan-cat.gif"
-        className={cn("fixed z-10 h-40 w-auto pointer-events-auto")}
+        className={cn("fixed z-10 h-40 w-auto")}
         alt="Nyan Cat"
-        draggable={false}
       />
     </motion.div>
   );

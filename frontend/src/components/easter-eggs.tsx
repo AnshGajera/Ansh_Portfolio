@@ -1,63 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useDevToolsOpen } from "@/hooks/use-devtools-open";
+import React, { useEffect } from "react";
 import NyanCat from "./nyan-cat";
 
 const EasterEggs = () => {
-  const [mounted, setMounted] = useState(false);
-  const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
+  const { isDevToolsOpen } = useDevToolsOpen();
   
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
+    if (!isDevToolsOpen) return;
     
-    let cleanupFn: (() => void) | undefined;
-    
-    const initDevToolsDetection = async () => {
-      try {
-        const detector = await import("devtools-detector");
-        detector.addListener((isOpen) => {
-          if (isOpen) {
-            setIsDevToolsOpen(true);
-            detector?.stop();
-          }
-        });
-        detector.launch();
-        
-        cleanupFn = () => {
-          try {
-            detector?.stop();
-          } catch (error) {
-            // Ignore cleanup errors
-          }
-        };
-      } catch (error) {
-        console.warn("DevTools detector failed to initialize:", error);
-      }
-    };
-    
-    initDevToolsDetection();
-    
-    return () => {
-      if (cleanupFn) {
-        cleanupFn();
-      }
-    };
-  }, [mounted]);
-
-  useEffect(() => {
-    if (!isDevToolsOpen || !mounted) return;
-    // console.log(
-    //   "%cWhoa, look at you! 🕵️‍♂️\n\n" +
-    //     "Peeking under the hood, eh? Just be careful, " +
-    //     "you might find some 🐛 bugs that even I didn't know about! 😅\n\n" +
-    //     "By the way, did you know the console is a portal to another dimension? 🌌 " +
-    //     "Just kidding... or am I? 👽\n\n" +
-    //     "Keep exploring, brave soul! 🛠️",
-    //   "color: #00FF00; font-size: 16px; font-weight: bold; background-color: black; padding: 10px; border-radius: 10px;"
-    // );
     if (typeof console !== "undefined") {
       console.clear();
       console.log(
@@ -65,7 +16,6 @@ const EasterEggs = () => {
         "You seem to have discovered the secret console! 🔍\n" +
         "Want to see some magic? ✨\n" +
         "Just type %cmy first name%c and hit enter! 🎩🐇",
-        //   "Just press the %c'n'%c key and watch the magic happen! 🪄",
         "color: #FFD700; font-size: 16px; font-weight: bold; background-color: black; padding: 10px; border-radius: 10px; margin-top:20px",
         "color: #00FF00; font-size: 16px; font-weight: bold; background-color: black; padding: 10px; border-radius: 10px; margin-top:20px",
         "color: #FFD700; font-size: 16px; font-weight: bold; background-color: black; padding: 10px; border-radius: 10px;"
@@ -80,7 +30,6 @@ const EasterEggs = () => {
               "%c✨ Abra Kadabra! ✨\n\n" +
               "You just summoned the magic of Ansh! 🧙‍♂️\n" +
               "What??? youre not impressed? Fine, but remember: With great power comes great responsibility! 💻⚡",
-
               "color: #FF4500; font-size: 18px; font-weight: bold; background-color: black; padding: 10px; border-radius: 10px; margin-top:10px"
             );
 
@@ -98,9 +47,6 @@ const EasterEggs = () => {
       });
     }
   }, [isDevToolsOpen]);
-
-  // Only render on client-side to avoid hydration issues
-  if (!mounted) return null;
 
   return (
     <>
