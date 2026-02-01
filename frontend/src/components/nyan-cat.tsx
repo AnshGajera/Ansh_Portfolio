@@ -4,15 +4,15 @@ import React, { useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
-  animate,
   useAnimationControls,
 } from "framer-motion";
 
 const getRandomHeight = () => {
-  return `${Math.random() * 100}vh`;
+  return `${Math.random() * 80}vh`;
 };
 
 const NyanCat = () => {
+  const [mounted, setMounted] = useState(false);
   const [divs, setDivs] = useState<
     {
       id: string;
@@ -20,7 +20,11 @@ const NyanCat = () => {
   >([]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !mounted) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "n" || e.key === "N") {
@@ -35,7 +39,9 @@ const NyanCat = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) return null;
 
   return (
     <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[40] pointer-events-none">
@@ -68,7 +74,7 @@ const AnimatedDiv = ({
   onClick: () => void;
   onCompleted: () => void;
 }) => {
-  const randY = getRandomHeight();
+  const [randY] = useState(() => getRandomHeight());
 
   const controls = useAnimationControls();
 
@@ -78,7 +84,7 @@ const AnimatedDiv = ({
       y: randY,
       transition: { duration: 5, ease: "linear" },
     });
-  }, [controls]);
+  }, [controls, randY]);
 
   const handlePause = () => {
     onClick();

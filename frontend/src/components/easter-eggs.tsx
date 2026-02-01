@@ -5,7 +5,13 @@ import NyanCat from "./nyan-cat";
 import { AnimatePresence } from "framer-motion";
 
 const EasterEggs = () => {
+  const [mounted, setMounted] = useState(false);
   const { isDevToolsOpen } = useDevToolsOpen();
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!isDevToolsOpen) return;
     // console.log(
@@ -57,6 +63,9 @@ const EasterEggs = () => {
       });
     }
   }, [isDevToolsOpen]);
+
+  // Only render on client-side to avoid hydration issues
+  if (!mounted) return null;
 
   return (
     <>
