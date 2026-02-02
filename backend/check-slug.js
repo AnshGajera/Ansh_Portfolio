@@ -12,6 +12,9 @@ const dbConnect = async () => {
 const projectSchema = new mongoose.Schema({}, { strict: false });
 const Project = mongoose.models.Project || mongoose.model('Project', projectSchema);
 
+
+
+
 async function checkSlug() {
     await dbConnect();
     const slug = 'threatscope-android-malware-analysis';
