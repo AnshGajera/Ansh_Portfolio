@@ -1,20 +1,36 @@
 import { useEffect, useState } from "react";
-import { addListener, launch, stop } from "devtools-detector";
 
 export const useDevToolsOpen = () => {
   const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    addListener((isOpen) => {
-      if (isOpen) {
-        setIsDevToolsOpen(true);
-        stop();
+    
+    let detector: typeof import("devtools-detector") | null = null;
+    
+    const initDetector = async () => {
+      try {
+        detector = await import("devtools-detector");
+        detector.addListener((isOpen) => {
+          if (isOpen) {
+            setIsDevToolsOpen(true);
+            detector?.stop();
+          }
+        });
+        detector.launch();
+      } catch (error) {
+        console.warn("DevTools detector failed to initialize:", error);
       }
-    });
-    launch();
+    };
+    
+    initDetector();
+    
     return () => {
-      stop();
+      try {
+        detector?.stop();
+      } catch (error) {
+        // Ignore cleanup errors
+      }
     };
   }, []);
   return { isDevToolsOpen };

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
-  animate,
   useAnimationControls,
 } from "framer-motion";
 
@@ -19,16 +18,16 @@ const NyanCat = () => {
     }[]
   >([]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const spawnDiv = () => {
+    const newDiv = {
+      id: (Math.random() * 100000).toFixed(),
+    };
+    setDivs((prevDivs) => [...prevDivs, newDiv]);
+  };
 
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "n" || e.key === "N") {
-        const newDiv = {
-          id: (Math.random() * 100000).toFixed(),
-        };
-        setDivs((prevDivs) => [...prevDivs, newDiv]);
-      }
+      if (e.key === "n" || e.key === "N") spawnDiv();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -38,7 +37,7 @@ const NyanCat = () => {
   }, []);
 
   return (
-    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[40] pointer-events-none">
+    <div className="fixed left-0 top-0 w-screen h-screen overflow-hidden z-[-1]">
       <AnimatePresence>
         {divs.length > 0 && (
           <div className="fixed w-screen flex left-0 top-16">{divs.length}</div>
@@ -51,7 +50,7 @@ const NyanCat = () => {
             id={div.id}
             onClick={() => console.log("clicked")}
             onCompleted={() => {
-              setDivs(divs.filter((d) => d.id !== div.id));
+              setDivs((prevDivs) => prevDivs.filter((d) => d.id !== div.id));
             }}
           />
         ))}
@@ -78,7 +77,7 @@ const AnimatedDiv = ({
       y: randY,
       transition: { duration: 5, ease: "linear" },
     });
-  }, [controls]);
+  }, [controls, randY]);
 
   const handlePause = () => {
     onClick();
