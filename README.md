@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/public/assets/seo/og-image.png" alt="Ansh Gajera Portfolio" width="100%" />
+<img src="frontend/public/assets/nav-link-previews/landing.png" alt="Ansh Gajera Portfolio" width="100%" />
 
 # 🚀 Ansh Gajera — Personal Portfolio
 
@@ -206,3 +206,4 @@ Feel free to reach out for collaborations, feedback, or just to say hi!
 ⭐ If you like this project, give it a star!
 
 </div>
+
