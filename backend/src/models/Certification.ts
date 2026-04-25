@@ -14,6 +14,7 @@ export interface ICertification extends Document {
   pdf?: string;
   active?: boolean;
   featured: boolean;
+  priority?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +34,7 @@ const CertificationSchema: Schema = new Schema({
   active: { type: Boolean, default: true, index: true },
   featured: { type: Boolean, default: false, index: true },
   status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft', index: true },
+  priority: { type: Number, default: 999, index: true },
 }, {
   timestamps: true,
 });

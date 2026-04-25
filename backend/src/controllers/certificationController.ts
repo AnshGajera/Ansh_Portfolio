@@ -135,3 +135,50 @@ export async function deleteCertificationHandler(request: NextRequest, id: strin
     return build(false, 'Failed to delete certification');
   }
 }
+
+export async function updateCertificationPriorityHandler(request: NextRequest, id: string, verifyToken: (t: string) => { id: string; email: string } | null) {
+  try {
+    const cookie = request.cookies.get('admin_token')?.value;
+    if (!cookie || !verifyToken(cookie)) return build(false, 'Unauthorized');
+
+    await dbConnect();
+    const body = await request.json();
+
+    if (typeof body.priority !== 'number') {
+      return build(false, 'Priority must be a number');
+    }
+
+    const updated = await service.updateCertificationPriority(id, body.priority);
+    if (!updated) return build(false, 'Certification not found');
+    return build(true, 'Certification priority updated', updated);
+  } catch (err) {
+    console.error('updateCertificationPriorityHandler', err);
+    return build(false, 'Failed to update certification priority');
+  }
+}
+
+export async function bulkUpdateCertificationPrioritiesHandler(request: NextRequest, verifyToken: (t: string) => { id: string; email: string } | null) {
+  try {
+    const cookie = request.cookies.get('admin_token')?.value;
+    if (!cookie || !verifyToken(cookie)) return build(false, 'Unauthorized');
+
+    await dbConnect();
+    const body = await request.json();
+
+    if (!Array.isArray(body.updates)) {
+      return build(false, 'Updates must be an array of {id, priority} objects');
+    }
+
+    for (const update of body.updates) {
+      if (!update.id || typeof update.priority !== 'number') {
+        return build(false, 'Each update must have id (string) and priority (number)');
+      }
+    }
+
+    const result = await service.bulkUpdatePriorities(body.updates);
+    return build(true, `Updated ${result.modifiedCount} certifications`, result);
+  } catch (err) {
+    console.error('bulkUpdateCertificationPrioritiesHandler', err);
+    return build(false, 'Failed to bulk update certification priorities');
+  }
+}

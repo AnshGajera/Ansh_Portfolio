@@ -15,6 +15,7 @@ type certification = {
   image?: string;
   featured?: boolean;
   active?: boolean;
+  priority?: number;
   createdAt?: string;
 };
 
@@ -240,6 +241,10 @@ export default function certificationsPage() {
 
           <Link href="/admin/certifications/add" className="btn-accent px-5 py-2 rounded-lg font-medium transition">
             Add certification
+          </Link>
+
+          <Link href="/admin/certifications/priority" className="btn-accent px-5 py-2 rounded-lg font-medium transition">
+            Reorder Priority
           </Link>
         </div>
       </div>

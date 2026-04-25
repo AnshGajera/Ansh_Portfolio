@@ -1,5 +1,13 @@
 // API Service for fetching data from backend
-const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000').replace(/\/$/, '');
+const DEFAULT_API_URL =
+    process.env.NODE_ENV === 'production'
+        ? 'https://portfolio-admin-panel-sigma.vercel.app'
+        : 'http://localhost:4000';
+
+const API_URL =
+    typeof window === 'undefined'
+        ? (process.env.NEXT_PUBLIC_BACKEND_URL || DEFAULT_API_URL).replace(/\/$/, '')
+        : '';
 
 // Project type from backend
 export interface BackendProject {
@@ -50,6 +58,7 @@ export interface BackendCertification {
     pdf?: string;
     active?: boolean;
     featured: boolean;
+    priority?: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -87,8 +96,8 @@ export async function fetchProjects(): Promise<BackendProject[]> {
 // Fetch single project by slug
 export async function fetchProjectBySlug(slug: string): Promise<BackendProject | null> {
     try {
-        const url = `${API_URL}/api/projects/${slug}`;
-        console.log('[API] Fetching project from:', url);
+        const normalizedSlug = decodeURIComponent(slug).trim();
+        const url = `${API_URL}/api/projects/${encodeURIComponent(normalizedSlug)}`;
 
         const res = await fetch(url, {
             cache: 'no-store',
@@ -97,16 +106,29 @@ export async function fetchProjectBySlug(slug: string): Promise<BackendProject |
             },
         });
 
-        console.log('[API] Response status:', res.status);
-
-        if (!res.ok) {
-            console.error('[API] Failed to fetch project:', res.status);
-            return null;
+        if (res.ok) {
+            const json: ApiResponse<BackendProject> = await res.json();
+            if (json.success && json.data) return json.data;
         }
 
-        const json: ApiResponse<BackendProject> = await res.json();
-        console.log('[API] Response JSON:', JSON.stringify(json).substring(0, 200));
-        return json.success && json.data ? json.data : null;
+        const bySlugRes = await fetch(`${API_URL}/api/projects?slug=${encodeURIComponent(normalizedSlug)}`, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (bySlugRes.ok) {
+            const json: ApiResponse<{ items: BackendProject[] }> = await bySlugRes.json();
+            const project = json.success && json.data?.items?.[0] ? json.data.items[0] : null;
+            if (project) return project;
+        }
+
+        const projects = await fetchProjects();
+        return projects.find((project) => {
+            const projectSlug = decodeURIComponent(project.slug).trim();
+            return projectSlug === normalizedSlug || project._id === normalizedSlug;
+        }) ?? null;
     } catch (error) {
         console.error('Error fetching project:', error);
         return null;

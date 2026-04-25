@@ -3,12 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-// @ts-ignore
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css/core";
-import "@splidejs/react-splide/css";
 import { fetchProjectBySlug, BackendProject } from "@/lib/api";
-import { ArrowLeft, ExternalLink, Github, Calendar } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 function ProjectDetailPage() {
@@ -18,6 +14,7 @@ function ProjectDetailPage() {
     const [project, setProject] = useState<BackendProject | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
         async function loadProject() {
@@ -38,6 +35,10 @@ function ProjectDetailPage() {
         }
         loadProject();
     }, [slug]);
+
+    useEffect(() => {
+        setCurrentImage(0);
+    }, [project?._id]);
 
     if (loading) {
         return (
@@ -63,9 +64,12 @@ function ProjectDetailPage() {
         );
     }
 
-    const images = project.images?.filter(img => img.showOnProject !== false) || [];
+    const images = project.images?.filter((img) => !!img.url) || [];
+    const selectedImage = images[currentImage];
     const projectDate = new Date(project.createdAt);
     const formattedDate = projectDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const goToPreviousImage = () => setCurrentImage((index) => (index === 0 ? images.length - 1 : index - 1));
+    const goToNextImage = () => setCurrentImage((index) => (index + 1) % images.length);
 
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950">
@@ -154,37 +158,41 @@ function ProjectDetailPage() {
                         </h1>
 
                         {/* Image Gallery */}
-                        {images.length > 0 && (
+                        {selectedImage && (
                             <div className="space-y-4">
-                                <div className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
-                                    <Splide
-                                        options={{
-                                            type: "loop",
-                                            interval: 4000,
-                                            autoplay: true,
-                                            speed: 2000,
-                                            perMove: 1,
-                                            rewind: true,
-                                            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-                                            arrows: images.length > 1,
-                                            pagination: false,
-                                        }}
-                                        aria-label="Project Screenshots"
-                                    >
-                                        {images.map((image, index) => (
-                                            <SplideSlide key={index}>
-                                                <div className="relative w-full aspect-video bg-zinc-100 dark:bg-zinc-900">
-                                                    <Image
-                                                        src={image.url}
-                                                        alt={image.caption || `Screenshot ${index + 1} of ${project.title}`}
-                                                        fill
-                                                        className="object-contain"
-                                                        unoptimized={image.url.startsWith("http")}
-                                                    />
-                                                </div>
-                                            </SplideSlide>
-                                        ))}
-                                    </Splide>
+                                <div className="relative rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                                    <div className="relative w-full aspect-video bg-zinc-100 dark:bg-zinc-900">
+                                        <Image
+                                            src={selectedImage.url}
+                                            alt={selectedImage.caption || `Screenshot ${currentImage + 1} of ${project.title}`}
+                                            fill
+                                            className="object-contain"
+                                            unoptimized={selectedImage.url.startsWith("http")}
+                                        />
+                                    </div>
+                                    {images.length > 1 && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={goToPreviousImage}
+                                                aria-label="Previous project image"
+                                                className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black/90"
+                                            >
+                                                <ChevronLeft className="h-6 w-6" />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={goToNextImage}
+                                                aria-label="Next project image"
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black/90"
+                                            >
+                                                <ChevronRight className="h-6 w-6" />
+                                            </button>
+                                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                                                {currentImage + 1} / {images.length}
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                                 {/* Thumbnails */}
                                 {images.length > 1 && (
@@ -192,7 +200,9 @@ function ProjectDetailPage() {
                                         {images.map((image, index) => (
                                             <div
                                                 key={index}
-                                                className="relative w-24 h-16 flex-shrink-0 rounded-md overflow-hidden border border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors cursor-pointer"
+                                                onClick={() => setCurrentImage(index)}
+                                                className={`relative w-24 h-16 flex-shrink-0 rounded-md overflow-hidden border transition-colors cursor-pointer ${index === currentImage ? 'border-blue-500 ring-2 ring-blue-500/40' : 'border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500'
+                                                    }`}
                                             >
                                                 <Image
                                                     src={image.url}

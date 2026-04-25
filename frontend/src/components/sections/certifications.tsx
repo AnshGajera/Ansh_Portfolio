@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,10 +19,13 @@ const CertificationsSection = () => {
         const backendData = await fetchCertifications();
         console.log('Fetched certifications:', backendData);
         if (backendData && backendData.length > 0) {
-          // Filter active certifications, sort by issue date (newest first), take max 6
+          // Filter active certifications, sort by admin priority, take max 6
           const filtered = backendData
             .filter(c => c.active !== false)
-            .sort((a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime())
+            .sort((a, b) =>
+              (a.priority || 999) - (b.priority || 999) ||
+              new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
+            )
             .slice(0, 6);
           console.log('Filtered certifications:', filtered);
           setCertifications(filtered);
@@ -92,10 +96,19 @@ const CertificationsSection = () => {
 };
 
 const CertificationCard = ({ certification }: { certification: BackendCertification }) => {
+  const router = useRouter();
   const mainImage = certification.image || "/assets/certifications/default-cert.png";
 
   return (
-    <Link href={`/certifications/${certification.slug}`} className="group cursor-pointer h-full">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => router.push(`/certifications/${certification.slug}`)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") router.push(`/certifications/${certification.slug}`);
+      }}
+      className="group cursor-pointer h-full"
+    >
       <div className="h-full flex flex-col bg-white dark:bg-zinc-900/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-zinc-200 dark:border-zinc-800">
         <div className="relative w-full h-48 overflow-hidden bg-gray-100 dark:bg-zinc-800 shrink-0">
           <Image
@@ -128,7 +141,7 @@ const CertificationCard = ({ certification }: { certification: BackendCertificat
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -30,13 +30,13 @@ export async function listCertifications(opts: ListOpts = {}): Promise<Paginated
   if (opts.q) filter.$text = { $search: opts.q };
   if (opts.tags && opts.tags.length) filter.tags = { $in: opts.tags };
   if (opts.status) filter.status = opts.status;
-  // active filter: if opts.active === true, only active certifications are returned
+  // Treat older records without an `active` field as public. Only explicit false hides them.
   if (typeof opts.active === 'boolean') {
-    filter.active = opts.active;
+    filter.active = opts.active ? { $ne: false } : false;
   }
 
   const [items, total] = await Promise.all([
-    Certification.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).select('title slug image tags status description link issuer issueDate expiryDate credentialId createdAt updatedAt active featured').lean(),
+    Certification.find(filter).sort({ priority: 1, issueDate: -1, createdAt: -1 }).skip(skip).limit(limit).select('title slug image tags status description link issuer issueDate expiryDate credentialId createdAt updatedAt active featured priority').lean(),
     Certification.countDocuments(filter),
   ]);
 
@@ -64,4 +64,22 @@ export async function updateCertification(id: string, payload: Partial<ICertific
 
 export async function deleteCertification(id: string) {
   return Certification.findByIdAndDelete(id).lean();
+}
+
+export async function updateCertificationPriority(id: string, priority: number) {
+  return Certification.findByIdAndUpdate(id, { $set: { priority } }, { new: true, runValidators: true }).lean();
+}
+
+export async function bulkUpdatePriorities(updates: Array<{ id: string; priority: number }>) {
+  const bulkOps = updates.map(({ id, priority }) => ({
+    updateOne: {
+      filter: { _id: id },
+      update: { $set: { priority } },
+    },
+  }));
+
+  if (bulkOps.length === 0) return { modifiedCount: 0 };
+
+  const result = await Certification.bulkWrite(bulkOps);
+  return result;
 }

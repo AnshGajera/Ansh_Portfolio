@@ -209,6 +209,7 @@ export default function ProjectsPage() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search projects..."
             className="px-4 py-2 border rounded-lg text-sm min-w-[200px]"
+            suppressHydrationWarning
           />
 
           <div className="flex border rounded-lg overflow-hidden">
@@ -216,6 +217,7 @@ export default function ProjectsPage() {
               onClick={() => setViewMode('grid')}
               className={`px-4 py-2 text-sm font-medium transition ${viewMode === 'grid' ? 'btn-accent text-btn-accent-text' : 'bg-white text-gray-700'
                 }`}
+              suppressHydrationWarning
             >
               Grid
             </button>
@@ -223,6 +225,7 @@ export default function ProjectsPage() {
               onClick={() => setViewMode('list')}
               className={`px-4 py-2 text-sm font-medium transition ${viewMode === 'list' ? 'btn-accent text-btn-accent-text' : 'bg-white text-gray-700'
                 }`}
+              suppressHydrationWarning
             >
               Table
             </button>
@@ -286,6 +289,7 @@ export default function ProjectsPage() {
                             className="border rounded px-2 py-1 w-full"
                             value={draft?.title ?? ''}
                             onChange={(e) => updateDraft(p._id, { title: e.target.value })}
+                            suppressHydrationWarning
                           />
                         ) : (
                           p.title
@@ -298,6 +302,7 @@ export default function ProjectsPage() {
                             className="border rounded px-2 py-1 w-full"
                             value={draft?.slug ?? ''}
                             onChange={(e) => updateDraft(p._id, { slug: e.target.value })}
+                            suppressHydrationWarning
                           />
                         ) : (
                           p.slug
@@ -314,6 +319,7 @@ export default function ProjectsPage() {
                                 tags: e.target.value.split(',').map((t) => t.trim()).filter(Boolean),
                               })
                             }
+                            suppressHydrationWarning
                           />
                         ) : (
                           <span className="text-xs">{(p.tags ?? []).join(', ')}</span>
@@ -326,6 +332,7 @@ export default function ProjectsPage() {
                             type="checkbox"
                             checked={!!draft?.featured}
                             onChange={(e) => updateDraft(p._id, { featured: e.target.checked })}
+                            suppressHydrationWarning
                           />
                         ) : p.featured ? (
                           'Yes'
@@ -346,6 +353,7 @@ export default function ProjectsPage() {
                               toggleActive(p._id, e.target.checked);
                             }}
                             className="sr-only peer"
+                            suppressHydrationWarning
                           />
                           <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         </label>
@@ -354,7 +362,7 @@ export default function ProjectsPage() {
                       <td className="px-6 py-4 text-sm">
                         {isEditing ? (
                           <div className="flex gap-2">
-                            <button onClick={() => saveDraft(p._id)} className="text-green-600 font-medium hover:underline">
+                            <button onClick={() => saveDraft(p._id)} className="text-green-600 font-medium hover:underline" suppressHydrationWarning>
                               Save
                             </button>
                             <button
@@ -367,6 +375,7 @@ export default function ProjectsPage() {
                                 });
                               }}
                               className="text-gray-600 hover:underline"
+                              suppressHydrationWarning
                             >
                               Cancel
                             </button>
@@ -379,10 +388,10 @@ export default function ProjectsPage() {
                             <Link href={`/projects/${p.slug}`} target="_blank" className="text-gray-600 hover:underline">
                               View →
                             </Link>
-                            <button type="button" onClick={() => startEdit(p)} className="text-indigo-600 hover:underline">
+                            <button type="button" onClick={() => startEdit(p)} className="text-indigo-600 hover:underline" suppressHydrationWarning>
                               Quick Edit
                             </button>
-                            <button type="button" onClick={() => handleDelete(p._id)} className="text-red-600 hover:underline">
+                            <button type="button" onClick={() => handleDelete(p._id)} className="text-red-600 hover:underline" suppressHydrationWarning>
                               Delete
                             </button>
                           </div>
@@ -405,6 +414,7 @@ export default function ProjectsPage() {
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
             className="px-4 py-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            suppressHydrationWarning
           >
             Previous
           </button>
@@ -415,6 +425,7 @@ export default function ProjectsPage() {
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
             className="px-4 py-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            suppressHydrationWarning
           >
             Next
           </button>

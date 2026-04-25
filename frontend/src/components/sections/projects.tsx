@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,11 +19,11 @@ const ProjectsSection = () => {
         const backendData = await fetchProjects();
         console.log('Fetched projects:', backendData);
         if (backendData && backendData.length > 0) {
-          // Filter active projects, sort by priority, take max 6
+          // Filter active projects, sort by priority, take max 9
           const filtered = backendData
             .filter(p => p.active !== false)
             .sort((a, b) => (a.priority || 999) - (b.priority || 999))
-            .slice(0, 6);
+            .slice(0, 9);
           console.log('Filtered projects:', filtered);
           setProjects(filtered);
         } else {
@@ -48,7 +49,7 @@ const ProjectsSection = () => {
           Projects
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(9)].map((_, i) => (
             <div key={i} className="animate-pulse">
               <div className="w-full h-48 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
               <div className="mt-4 h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
@@ -92,10 +93,19 @@ const ProjectsSection = () => {
 };
 
 const ProjectCard = ({ project }: { project: BackendProject }) => {
+  const router = useRouter();
   const mainImage = project.images?.[0]?.url || "/assets/projects-screenshots/logo-dark.webp";
 
   return (
-    <Link href={`/projects/${project.slug}`} className="group cursor-pointer h-full">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => router.push(`/projects/${project.slug}`)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") router.push(`/projects/${project.slug}`);
+      }}
+      className="group cursor-pointer h-full"
+    >
       <div className="h-full flex flex-col bg-white dark:bg-zinc-900/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-zinc-200 dark:border-zinc-800">
         <div className="relative w-full h-48 overflow-hidden shrink-0">
           <Image
@@ -125,7 +135,7 @@ const ProjectCard = ({ project }: { project: BackendProject }) => {
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

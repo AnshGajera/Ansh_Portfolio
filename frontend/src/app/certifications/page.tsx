@@ -15,8 +15,10 @@ function CertificationsPage() {
             try {
                 const data = await fetchCertifications();
                 const activeCerts = data.filter(c => c.active !== false);
-                // Sort by date desc
-                activeCerts.sort((a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime());
+                activeCerts.sort((a, b) =>
+                    (a.priority || 999) - (b.priority || 999) ||
+                    new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
+                );
                 setCertifications(activeCerts);
             } catch (error) {
                 console.error("Failed to load certifications", error);
